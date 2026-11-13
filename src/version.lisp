@@ -41,8 +41,8 @@ build itself is not blocked by a missing repository."
 
 This mirrors what the 40ants-asdf-system class does on an explicit
 load-system: the first changelog entry defines the version. Forms
-are read into a temporary package, because DEFCHANGELOG and version
-symbols are not interned anywhere in the build image."
+are read into a temporary package, because the changelog macro and
+version symbols are not interned anywhere in the build image."
   (ignore-errors
     (let ((path (asdf:system-relative-pathname system
                                                "docs/changelog.lisp")))

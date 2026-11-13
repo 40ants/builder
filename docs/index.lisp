@@ -110,9 +110,9 @@ a reusable library:
    to its slash nickname, pushes the `:deploy-console` feature and
    removes the build debugger hook, so it does not get dumped into
    the image;
-7. dumps the binary: `asdf:make` on SBCL and CCL, and
-   `asdf:program-op` on ECL, which does not support
-   `uiop:dump-image`.
+7. dumps the binary: asdf:make on SBCL and CCL, and
+   asdf:program-op on ECL, which does not support
+   uiop:dump-image.
 
 On success the process exits with code 0; on failure the condition is
 printed with a backtrace and the process exits with code 1.
@@ -125,7 +125,7 @@ quitting:
 (40ants-builder:build :pingvito :slynk-modules nil)
 ```
 
-Note that a binary built on one OS or architecture cannot run on
+Note that a binary built on one operating system or architecture cannot run on
 another one. Build on the target host or in an equivalent
 environment, and keep the `bin/` directory with native libraries next
 to the binary in the release.

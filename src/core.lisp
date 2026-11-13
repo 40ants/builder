@@ -62,8 +62,8 @@ into a reusable library:
 4. quickloads Deploy, SYSTEM and SLYNK-MODULES (defaults to
    *default-slynk-modules*; pass NIL to skip them);
 5. pins the build identification: the git commit goes into
-   *git-commit* and SYSTEM's component-version becomes
-   VERSION+GIT.COMMIT;
+   *git-commit* and the commit is appended to the ASDF version of
+   SYSTEM;
 6. prepares the image for the dump: renames the Clack handler package
    to its slash nickname, pushes the :deploy-console feature and
    removes the build debugger hook;

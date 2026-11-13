@@ -22,13 +22,13 @@ registering every returned name."
   "Return DEFPACKAGE clauses for a conduit package, skipping symbol
 names already imported by a previous extension.
 
-This is a copy of ORG.TFEB.CONDUIT-PACKAGES::COMPUTE-CONDUIT-CLAUSES
-which elides such names: importing the same external symbol via two
-:import-from clauses is tolerated by SBCL, but is a hard error on CCL
-(\"Name ... is already used in a conflicting option\"). The Lisp-Stat
-project defines its packages with the :extends option of the
-conduit-packages DEFPACKAGE macro, and several of its extended
-packages export the same symbols."
+This is a copy of the compute-conduit-clauses function of the
+org.tfeb.conduit-packages library which elides such names: importing
+the same external symbol via two :import-from clauses is tolerated by
+SBCL, but is a hard error on CCL (\"Name ... is already used in a
+conflicting option\"). The Lisp-Stat project defines its packages
+with the :extends option of the conduit-packages DEFPACKAGE macro,
+and several of its extended packages export the same symbols."
   (let ((seen (make-hash-table :test #'equal)))
     (flet ((fresh (names)
              (deduplicate-names names seen)))

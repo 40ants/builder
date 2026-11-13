@@ -41,11 +41,10 @@ when the package was renamed."
 (defun prepare-image ()
   "Prepare the build image for the dump.
 
-Gives the Clack Hunchentoot handler package its slash nickname: Clack
-looks handlers up by a name with slashes (\"CLACK/HANDLER/...\"),
-does not find it in the current dist and calls ql:quickload at run
-time, which fails under ProtectHome. The nickname removes the runtime
-load.
+Gives the Clack Hunchentoot handler package its slash nickname:
+Clack looks handlers up by a name with slashes, does not find it in
+the current dist and calls ql:quickload at run time, which fails
+under ProtectHome. The nickname removes the runtime load.
 
 Then pushes the :deploy-console feature to silence Deploy's status
 output at service startup (\"Performing warm boot\", \"Loading foreign
@@ -56,7 +55,7 @@ the project's version flag.
 
 Finally, removes the build-only debugger hook, so it does not get
 dumped into the image: otherwise any runtime error would kill the
-service with a BUILD FAILED message instead of the project's own
+service with a build failure message instead of the project's own
 error handling."
   (ensure-package-nickname "CLACK.HANDLER.HUNCHENTOOT"
                            "CLACK/HANDLER/HUNCHENTOOT")
@@ -72,7 +71,8 @@ On SBCL and CCL this is asdf:make, which performs the system's
 uiop:dump-image, and deploy-op relies on it, so under ECL the standard
 asdf:program-op is used instead: the system is compiled to C and the
 object files are linked into an executable with c:build-program,
-using the :entry-point and :build-pathname from the system's ASD file."
+using the :entry-point and :build-pathname from the system's
+definition file."
   #+ecl
   (asdf:operate 'asdf:program-op system)
   #-ecl

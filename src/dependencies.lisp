@@ -16,8 +16,8 @@
 
 The Slynk server tries to load these modules when a client connects
 and cannot do that in production, where neither Quicklisp nor the
-sources are reachable. Pass NIL as SLYNK-MODULES argument of BUILD to
-skip them.")
+sources are reachable. Pass NIL as SLYNK-MODULES argument of the
+build function to skip them.")
 
 
 (defun load-build-dependencies (system &key (slynk-modules
