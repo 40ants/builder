@@ -40,7 +40,7 @@ build itself is not blocked by a missing repository."
   "Return the topmost version from SYSTEM's docs/changelog.lisp or NIL.
 
 This mirrors what the 40ants-asdf-system class does on an explicit
-load-system: the first defchangelog entry defines the version. Forms
+load-system: the first changelog entry defines the version. Forms
 are read into a temporary package, because DEFCHANGELOG and version
 symbols are not interned anywhere in the build image."
   (ignore-errors
@@ -66,8 +66,8 @@ symbols are not interned anywhere in the build image."
 (defun pin-build-version (system)
   "Capture build-time identification of SYSTEM into the image.
 
-Stores the git commit into *git-commit* and updates the system's
-component-version to VERSION+GIT.COMMIT, where the version is
+Stores the git commit into *git-commit* and appends the commit to the
+system's version, updating its component-version. The version is
 taken from the system's component-version or, when it is unset, from
 the topmost entry of its docs/changelog.lisp.
 
