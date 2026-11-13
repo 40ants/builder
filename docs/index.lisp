@@ -105,7 +105,7 @@ a reusable library:
    Slynk client connects;
 5. pins the build identification: the git commit goes into
    `40ants-builder:*git-commit*` and the system's ASDF version
-   becomes `<version>+git.<commit>`;
+   becomes `VERSION+GIT.COMMIT`;
 6. prepares the image for the dump: renames the Clack handler package
    to its slash nickname, pushes the `:deploy-console` feature and
    removes the build debugger hook, so it does not get dumped into

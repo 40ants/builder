@@ -67,7 +67,7 @@ symbols are not interned anywhere in the build image."
   "Capture build-time identification of SYSTEM into the image.
 
 Stores the git commit into *git-commit* and updates the system's
-component-version to \"<version>+git.<commit>\", where the version is
+component-version to VERSION+GIT.COMMIT, where the version is
 taken from the system's component-version or, when it is unset, from
 the topmost entry of its docs/changelog.lisp.
 
