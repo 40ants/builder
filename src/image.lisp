@@ -52,7 +52,7 @@ output at service startup (\"Performing warm boot\", \"Loading foreign
 library ...\" etc.): with this feature the warm boot sets
 *status-output* to NIL, the same way deploy-console-op does for
 console applications. Build identification stays available through
-the project's --version flag.
+the project's version flag.
 
 Finally, removes the build-only debugger hook, so it does not get
 dumped into the image: otherwise any runtime error would kill the

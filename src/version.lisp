@@ -15,7 +15,7 @@
 
 The binary usually runs on a host without .git and sources
 (ProtectHome=read-only), so the commit has to be captured at build
-time. Projects use this variable in their --version output.")
+time. Projects use this variable in their version flag output.")
 
 
 (defun %git-commit (system)
@@ -71,9 +71,9 @@ component-version to VERSION+GIT.COMMIT, where the version is
 taken from the system's component-version or, when it is unset, from
 the topmost entry of its docs/changelog.lisp.
 
-Called before the image dump, so that the binary's --version reports
-the state of the sources it was built from, and not of whatever is on
-disk at run time. Returns the commit."
+Called before the image dump, so that the binary's version flag
+reports the state of the sources it was built from, and not of
+whatever is on disk at run time. Returns the commit."
   (let* ((system (find-system system))
          (commit (%git-commit system))
          (version (or (component-version system)
