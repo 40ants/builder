@@ -38,8 +38,8 @@
   (uiop:delete-directory-tree
    directory
    :validate (lambda (path)
-               (search "40ANTS-BUILDER-TESTS"
-                       (namestring path)))
+               (search "40ants-builder-tests"
+                       (string-downcase (namestring path))))
    :if-does-not-exist :ignore))
 
 
@@ -241,14 +241,13 @@
 (deftest register-local-systems-tolerates-missing-local-deps
   (let ((directory (%make-fixture-directory)))
     (unwind-protect
-         (let ((fake-system "40ants-builder-tests-fake-empty")
-               (before (length asdf:*central-registry*)))
+         (let ((fake-system "40ants-builder-tests-fake-empty"))
            (%write-fake-asd directory fake-system)
            (pushnew directory
                     asdf:*central-registry*
                     :test #'uiop:pathname-equal)
            (unwind-protect
-                (progn
+                (let ((before (length asdf:*central-registry*)))
                   (register-local-systems fake-system)
                   (ok (= (length asdf:*central-registry*)
                          before)))
