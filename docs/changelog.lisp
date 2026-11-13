@@ -1,0 +1,19 @@
+(uiop:define-package #:40ants-builder-docs/changelog
+  (:use #:cl)
+  (:import-from #:40ants-doc/changelog
+                #:defchangelog))
+(in-package #:40ants-builder-docs/changelog)
+
+
+(defchangelog (:ignore-words ("SBCL"
+                              "CCL"
+                              "ECL"
+                              "ASDF"
+                              "REPL"
+                              "CFFI"
+                              "CLI"))
+  (0.1.0 2026-11-13
+         "* Initial version. Extracted from the pingvito project's build.lisp
+            script. Supports SBCL, CCL and ECL, pins the git commit and the
+            changelog version into the dumped image, and bundles the Deploy
+            runtime together with Slynk contribs."))
