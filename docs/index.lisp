@@ -91,9 +91,9 @@ care of everything around that dump and finishes by calling
 - **One call builds the binary.** `(40ants-builder:build :my-app)`
   runs the whole pipeline: registry setup, workarounds, dependency
   loading, version pinning, image preparation and the dump.
-- **Local systems registered.** A `roswell/local-deps.lisp` file, when
-  present, is loaded to push local checkout directories onto the ASDF
-  registry.
+- **Local systems registered.** A `local-deps.lisp` file in the
+  project root, when present, is loaded to push local checkout
+  directories onto the ASDF registry.
 - **Implementation quirks patched.** On CCL the builder fixes CFFI's
   foreign library loader, which chokes on logical pathnames with a
   `:newest` version suffix, and teaches conduit-packages to elide
@@ -146,8 +146,8 @@ a reusable library:
 
 1. installs a debugger hook which fails the process with exit code 1
    instead of hanging in the interactive debugger;
-2. extends the ASDF registry from the system's
-   `roswell/local-deps.lisp`, when the file is present;
+2. extends the ASDF registry from the `local-deps.lisp` file in the
+   system's source directory, when it is present;
 3. installs implementation workarounds: patches CFFI's foreign
    library loader and conduit-packages's DEFPACKAGE clause
    computation on CCL, and creates an empty `NIL` package on ECL;

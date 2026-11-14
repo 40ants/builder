@@ -55,8 +55,8 @@ into a reusable library:
 
 1. installs a debugger hook which fails the process with exit code 1
    instead of hanging in the interactive debugger;
-2. extends the ASDF registry from SYSTEM's roswell/local-deps.lisp,
-   when the file is present;
+2. extends the ASDF registry from the local-deps.lisp file in
+   SYSTEM's source directory, when it is present;
 3. installs implementation workarounds (the CFFI and conduit-packages
    patches on CCL, the empty \"NIL\" package on ECL);
 4. quickloads Deploy, SYSTEM and SLYNK-MODULES (defaults to

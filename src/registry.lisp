@@ -5,7 +5,7 @@
 
 
 (defun %extend-registry-function ()
-  "Return the EXTEND-REGISTRY function defined by roswell/local-deps.lisp.
+  "Return the EXTEND-REGISTRY function defined by local-deps.lisp.
 
 The file defines the function in whatever package is current at load
 time, so we look it up in *package* first, then in CL-USER."
@@ -16,13 +16,13 @@ time, so we look it up in *package* first, then in CL-USER."
 (defun register-local-systems (system)
   "Extend the ASDF registry with systems local to the project being built.
 
-Projects keep a roswell/local-deps.lisp file next to their system
-definition file; it defines an extend-registry function which pushes
-local checkout directories onto asdf:*central-registry*. When the
-file is missing, nothing is registered and the call is a no-op,
-because a project may have all its dependencies on Quicklisp."
+Projects keep a local-deps.lisp file next to their system definition
+file; it defines an extend-registry function which pushes local
+checkout directories onto asdf:*central-registry*. When the file is
+missing, nothing is registered and the call is a no-op, because a
+project may have all its dependencies on Quicklisp."
   (let ((local-deps (asdf:system-relative-pathname system
-                                                   "roswell/local-deps.lisp")))
+                                                   "local-deps.lisp")))
     (when (probe-file local-deps)
       (format t "Loading local systems registry: ~A~%"
               local-deps)

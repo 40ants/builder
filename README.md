@@ -43,9 +43,9 @@ care of everything around that dump and finishes by calling
 * **One call builds the binary.** `(40ants-builder:build :my-app)`
   runs the whole pipeline: registry setup, workarounds, dependency
   loading, version pinning, image preparation and the dump.
-* **Local systems registered.** A `roswell/local-deps.lisp` file, when
-  present, is loaded to push local checkout directories onto the `ASDF`
-  registry.
+* **Local systems registered.** A `local-deps.lisp` file in the
+  project root, when present, is loaded to push local checkout
+  directories onto the `ASDF` registry.
 * **Implementation quirks patched.** On `CCL` the builder fixes `CFFI`'s
   foreign library loader, which chokes on logical pathnames with a
   `:newest` version suffix, and teaches conduit-packages to elide
@@ -96,8 +96,8 @@ a reusable library:
 
 1. installs a debugger hook which fails the process with exit code 1
    instead of hanging in the interactive debugger;
-2. extends the `ASDF` registry from the system's
-   `roswell/local-deps.lisp`, when the file is present;
+2. extends the `ASDF` registry from the `local-deps.lisp` file in the
+   system's source directory, when it is present;
 3. installs implementation workarounds: patches `CFFI`'s foreign
    library loader and conduit-packages's `DEFPACKAGE` clause
    computation on `CCL`, and creates an empty `NIL` package on `ECL`;
@@ -140,7 +140,7 @@ to the binary in the release.
 
 <a id="x-28-23A-28-2818-29-20BASE-CHAR-20-2E-20-2240ANTS-BUILDER-2FCCL-22-29-20PACKAGE-29"></a>
 
-#### [package](fa17) `40ants-builder/ccl`
+#### [package](07f3) `40ants-builder/ccl`
 
 <a id="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FCCL-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
@@ -148,14 +148,14 @@ to the binary in the release.
 
 <a id="x-2840ANTS-BUILDER-2FCCL-3ADEDUPLICATE-NAMES-20FUNCTION-29"></a>
 
-##### [function](c7b5) `40ants-builder/ccl:deduplicate-names` names seen
+##### [function](2a7f) `40ants-builder/ccl:deduplicate-names` names seen
 
 Return only those names which are not in the `SEEN` hash-table yet,
 registering every returned name.
 
 <a id="x-2840ANTS-BUILDER-2FCCL-3AELIDE-ALREADY-IMPORTED-CLAUSES-20FUNCTION-29"></a>
 
-##### [function](dde1) `40ants-builder/ccl:elide-already-imported-clauses` &key extends extends/including extends/excluding
+##### [function](1037) `40ants-builder/ccl:elide-already-imported-clauses` &key extends extends/including extends/excluding
 
 Return `DEFPACKAGE` clauses for a conduit package, skipping symbol
 names already imported by a previous extension.
@@ -170,7 +170,7 @@ and several of its extended packages export the same symbols.
 
 <a id="x-2840ANTS-BUILDER-2FCCL-3AINSTALL-CCL-PATCHES-20FUNCTION-29"></a>
 
-##### [function](9d6f) `40ants-builder/ccl:install-ccl-patches`
+##### [function](d288) `40ants-builder/ccl:install-ccl-patches`
 
 Patch `CFFI` and conduit-packages to make Lisp-Stat and its
 dependencies compile and load on `CCL`.
@@ -185,7 +185,7 @@ this is a no-op.
 
 <a id="x-28-23A-28-2819-29-20BASE-CHAR-20-2E-20-2240ANTS-BUILDER-2FCORE-22-29-20PACKAGE-29"></a>
 
-#### [package](2c8b) `40ants-builder/core`
+#### [package](6a54) `40ants-builder/core`
 
 <a id="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FCORE-3FClasses-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
@@ -197,13 +197,13 @@ this is a no-op.
 
 <a id="x-2840ANTS-BUILDER-2FCORE-3ABUILD-ERROR-20CONDITION-29"></a>
 
-###### [condition](5281) `40ants-builder/core:build-error` (error)
+###### [condition](c67f) `40ants-builder/core:build-error` (error)
 
 **Readers**
 
 <a id="x-2840ANTS-BUILDER-2FCORE-3ABUILD-ERROR-CONDITION-20-2840ANTS-DOC-2FLOCATIVES-3AREADER-2040ANTS-BUILDER-2FCORE-3ABUILD-ERROR-29-29"></a>
 
-###### [reader](5281) `40ants-builder/core:build-error-condition` (build-error) (:condition)
+###### [reader](c67f) `40ants-builder/core:build-error-condition` (build-error) (:condition)
 
 <a id="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FCORE-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
@@ -211,7 +211,7 @@ this is a no-op.
 
 <a id="x-2840ANTS-BUILDER-2FCORE-3ABUILD-20FUNCTION-29"></a>
 
-##### [function](e473) `40ants-builder/core:build` system &key (slynk-modules \*default-slynk-modules\*) (exit t)
+##### [function](163f) `40ants-builder/core:build` system &key (slynk-modules \*default-slynk-modules\*) (exit t)
 
 Build a standalone binary of `SYSTEM` and return the pinned git commit.
 
@@ -221,8 +221,8 @@ into a reusable library:
 
 1. installs a debugger hook which fails the process with exit code 1
    instead of hanging in the interactive debugger;
-2. extends the `ASDF` registry from `SYSTEM`'s roswell/local-deps.lisp,
-   when the file is present;
+2. extends the `ASDF` registry from the local-deps.lisp file in
+   `SYSTEM`'s source directory, when it is present;
 3. installs implementation workarounds (the `CFFI` and conduit-packages
    patches on `CCL`, the empty "`NIL`" package on `ECL`);
 4. quickloads Deploy, `SYSTEM` and `SLYNK-MODULES` (defaults to
@@ -243,7 +243,7 @@ signals build-error, wrapping the original condition, on failure.
 
 <a id="x-2840ANTS-BUILDER-2FVERSION-3APIN-BUILD-VERSION-20FUNCTION-29"></a>
 
-##### [function](0672) `40ants-builder/version:pin-build-version` system
+##### [function](92de) `40ants-builder/version:pin-build-version` system
 
 Capture build-time identification of `SYSTEM` into the image.
 
@@ -262,7 +262,7 @@ whatever is on disk at run time. Returns the commit.
 
 <a id="x-2840ANTS-BUILDER-2FDEPENDENCIES-3A-2ADEFAULT-SLYNK-MODULES-2A-20-28VARIABLE-29-29"></a>
 
-##### [variable](c12d) `40ants-builder/dependencies:*default-slynk-modules*` (:slynk/indentation :slynk/stickers :slynk/trace-dialog :slynk/package-fu
+##### [variable](02a4) `40ants-builder/dependencies:*default-slynk-modules*` (:slynk/indentation :slynk/stickers :slynk/trace-dialog :slynk/package-fu
  :slynk/fancy-inspector :slynk/arglists)
 
 Slynk contrib modules loaded into the image before the dump.
@@ -274,7 +274,7 @@ build function to skip them.
 
 <a id="x-2840ANTS-BUILDER-2FVERSION-3A-2AGIT-COMMIT-2A-20-28VARIABLE-29-29"></a>
 
-##### [variable](1785) `40ants-builder/version:*git-commit*` "unknown"
+##### [variable](916e) `40ants-builder/version:*git-commit*` "unknown"
 
 Git commit captured by pin-build-version before the image dump.
 
@@ -288,7 +288,7 @@ time. Projects use this variable in their version flag output.
 
 <a id="x-28-23A-28-2827-29-20BASE-CHAR-20-2E-20-2240ANTS-BUILDER-2FDEPENDENCIES-22-29-20PACKAGE-29"></a>
 
-#### [package](1eec) `40ants-builder/dependencies`
+#### [package](2e3d) `40ants-builder/dependencies`
 
 <a id="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FDEPENDENCIES-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
@@ -296,7 +296,7 @@ time. Projects use this variable in their version flag output.
 
 <a id="x-2840ANTS-BUILDER-2FDEPENDENCIES-3ALOAD-BUILD-DEPENDENCIES-20FUNCTION-29"></a>
 
-##### [function](3f61) `40ants-builder/dependencies:load-build-dependencies` system &key (slynk-modules \*default-slynk-modules\*)
+##### [function](2c27) `40ants-builder/dependencies:load-build-dependencies` system &key (slynk-modules \*default-slynk-modules\*)
 
 Load everything which has to be present in the dumped image.
 
@@ -308,7 +308,7 @@ This is the Deploy library, the `SYSTEM` being built and the `SLYNK-MODULES`.
 
 <a id="x-2840ANTS-BUILDER-2FDEPENDENCIES-3A-2ADEFAULT-SLYNK-MODULES-2A-20-28VARIABLE-29-29"></a>
 
-##### [variable](c12d) `40ants-builder/dependencies:*default-slynk-modules*` (:slynk/indentation :slynk/stickers :slynk/trace-dialog :slynk/package-fu
+##### [variable](02a4) `40ants-builder/dependencies:*default-slynk-modules*` (:slynk/indentation :slynk/stickers :slynk/trace-dialog :slynk/package-fu
  :slynk/fancy-inspector :slynk/arglists)
 
 Slynk contrib modules loaded into the image before the dump.
@@ -324,7 +324,7 @@ build function to skip them.
 
 <a id="x-28-23A-28-2818-29-20BASE-CHAR-20-2E-20-2240ANTS-BUILDER-2FECL-22-29-20PACKAGE-29"></a>
 
-#### [package](a448) `40ants-builder/ecl`
+#### [package](e8e3) `40ants-builder/ecl`
 
 <a id="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FECL-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
@@ -332,7 +332,7 @@ build function to skip them.
 
 <a id="x-2840ANTS-BUILDER-2FECL-3AINSTALL-ECL-WORKAROUNDS-20FUNCTION-29"></a>
 
-##### [function](16e4) `40ants-builder/ecl:install-ecl-workarounds`
+##### [function](79fd) `40ants-builder/ecl:install-ecl-workarounds`
 
 Prepare the image so the dependencies' `DEFPACKAGE` forms can be read
 on `ECL`.
@@ -356,7 +356,7 @@ this is a no-op.
 
 <a id="x-28-23A-28-2820-29-20BASE-CHAR-20-2E-20-2240ANTS-BUILDER-2FIMAGE-22-29-20PACKAGE-29"></a>
 
-#### [package](8347) `40ants-builder/image`
+#### [package](3d73) `40ants-builder/image`
 
 <a id="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FIMAGE-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
@@ -364,7 +364,7 @@ this is a no-op.
 
 <a id="x-2840ANTS-BUILDER-2FIMAGE-3ADUMP-BINARY-20FUNCTION-29"></a>
 
-##### [function](8c0b) `40ants-builder/image:dump-binary` system
+##### [function](c2e2) `40ants-builder/image:dump-binary` system
 
 Dump the standalone binary of `SYSTEM`.
 
@@ -378,7 +378,7 @@ definition file.
 
 <a id="x-2840ANTS-BUILDER-2FIMAGE-3AENSURE-PACKAGE-NICKNAME-20FUNCTION-29"></a>
 
-##### [function](3b1b) `40ants-builder/image:ensure-package-nickname` package-name nickname
+##### [function](a1ac) `40ants-builder/image:ensure-package-nickname` package-name nickname
 
 Add `NICKNAME` to the package named `PACKAGE-NAME`.
 
@@ -389,7 +389,7 @@ when the package was renamed.
 
 <a id="x-2840ANTS-BUILDER-2FIMAGE-3AINSTALL-BUILD-DEBUGGER-HOOK-20FUNCTION-29"></a>
 
-##### [function](1f73) `40ants-builder/image:install-build-debugger-hook`
+##### [function](5636) `40ants-builder/image:install-build-debugger-hook`
 
 Install a debugger hook which fails the build process immediately.
 
@@ -399,7 +399,7 @@ Roswell/`CCL`.
 
 <a id="x-2840ANTS-BUILDER-2FIMAGE-3APREPARE-IMAGE-20FUNCTION-29"></a>
 
-##### [function](2074) `40ants-builder/image:prepare-image`
+##### [function](4e9f) `40ants-builder/image:prepare-image`
 
 Prepare the build image for the dump.
 
@@ -426,7 +426,7 @@ error handling.
 
 <a id="x-28-23A-28-2823-29-20BASE-CHAR-20-2E-20-2240ANTS-BUILDER-2FREGISTRY-22-29-20PACKAGE-29"></a>
 
-#### [package](4e15) `40ants-builder/registry`
+#### [package](d5a8) `40ants-builder/registry`
 
 <a id="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FREGISTRY-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
@@ -434,15 +434,15 @@ error handling.
 
 <a id="x-2840ANTS-BUILDER-2FREGISTRY-3AREGISTER-LOCAL-SYSTEMS-20FUNCTION-29"></a>
 
-##### [function](70fc) `40ants-builder/registry:register-local-systems` system
+##### [function](3938) `40ants-builder/registry:register-local-systems` system
 
 Extend the `ASDF` registry with systems local to the project being built.
 
-Projects keep a roswell/local-deps.lisp file next to their system
-definition file; it defines an extend-registry function which pushes
-local checkout directories onto asdf:*central-registry*. When the
-file is missing, nothing is registered and the call is a no-op,
-because a project may have all its dependencies on Quicklisp.
+Projects keep a local-deps.lisp file next to their system definition
+file; it defines an extend-registry function which pushes local
+checkout directories onto asdf:*central-registry*. When the file is
+missing, nothing is registered and the call is a no-op, because a
+project may have all its dependencies on Quicklisp.
 
 <a id="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FVERSION-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
@@ -450,7 +450,7 @@ because a project may have all its dependencies on Quicklisp.
 
 <a id="x-28-23A-28-2822-29-20BASE-CHAR-20-2E-20-2240ANTS-BUILDER-2FVERSION-22-29-20PACKAGE-29"></a>
 
-#### [package](c7be) `40ants-builder/version`
+#### [package](2e1c) `40ants-builder/version`
 
 <a id="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FVERSION-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
@@ -458,7 +458,7 @@ because a project may have all its dependencies on Quicklisp.
 
 <a id="x-2840ANTS-BUILDER-2FVERSION-3APIN-BUILD-VERSION-20FUNCTION-29"></a>
 
-##### [function](0672) `40ants-builder/version:pin-build-version` system
+##### [function](92de) `40ants-builder/version:pin-build-version` system
 
 Capture build-time identification of `SYSTEM` into the image.
 
@@ -473,7 +473,7 @@ whatever is on disk at run time. Returns the commit.
 
 <a id="x-2840ANTS-BUILDER-2FVERSION-3AREAD-CHANGELOG-VERSION-20FUNCTION-29"></a>
 
-##### [function](a4f5) `40ants-builder/version:read-changelog-version` system
+##### [function](2ff3) `40ants-builder/version:read-changelog-version` system
 
 Return the topmost version from `SYSTEM`'s docs/changelog.lisp or `NIL`.
 
@@ -488,7 +488,7 @@ version symbols are not interned anywhere in the build image.
 
 <a id="x-2840ANTS-BUILDER-2FVERSION-3A-2AGIT-COMMIT-2A-20-28VARIABLE-29-29"></a>
 
-##### [variable](1785) `40ants-builder/version:*git-commit*` "unknown"
+##### [variable](916e) `40ants-builder/version:*git-commit*` "unknown"
 
 Git commit captured by pin-build-version before the image dump.
 
@@ -500,29 +500,29 @@ time. Projects use this variable in their version flag output.
 [64f1]: https://40ants.com/builder/
 [af68]: https://github.com/40ants/builder
 [c4f9]: https://github.com/40ants/builder/actions
-[fa17]: https://github.com/40ants/builder/blob/275423d4a762d2975b8281a030f3646fcebfed50/src/ccl.lisp#L1
-[dde1]: https://github.com/40ants/builder/blob/275423d4a762d2975b8281a030f3646fcebfed50/src/ccl.lisp#L19
-[9d6f]: https://github.com/40ants/builder/blob/275423d4a762d2975b8281a030f3646fcebfed50/src/ccl.lisp#L85
-[c7b5]: https://github.com/40ants/builder/blob/275423d4a762d2975b8281a030f3646fcebfed50/src/ccl.lisp#L9
-[2c8b]: https://github.com/40ants/builder/blob/275423d4a762d2975b8281a030f3646fcebfed50/src/core.lisp#L1
-[5281]: https://github.com/40ants/builder/blob/275423d4a762d2975b8281a030f3646fcebfed50/src/core.lisp#L29
-[e473]: https://github.com/40ants/builder/blob/275423d4a762d2975b8281a030f3646fcebfed50/src/core.lisp#L48
-[1eec]: https://github.com/40ants/builder/blob/275423d4a762d2975b8281a030f3646fcebfed50/src/dependencies.lisp#L1
-[3f61]: https://github.com/40ants/builder/blob/275423d4a762d2975b8281a030f3646fcebfed50/src/dependencies.lisp#L23
-[c12d]: https://github.com/40ants/builder/blob/275423d4a762d2975b8281a030f3646fcebfed50/src/dependencies.lisp#L8
-[a448]: https://github.com/40ants/builder/blob/275423d4a762d2975b8281a030f3646fcebfed50/src/ecl.lisp#L1
-[16e4]: https://github.com/40ants/builder/blob/275423d4a762d2975b8281a030f3646fcebfed50/src/ecl.lisp#L7
-[8347]: https://github.com/40ants/builder/blob/275423d4a762d2975b8281a030f3646fcebfed50/src/image.lisp#L1
-[1f73]: https://github.com/40ants/builder/blob/275423d4a762d2975b8281a030f3646fcebfed50/src/image.lisp#L10
-[3b1b]: https://github.com/40ants/builder/blob/275423d4a762d2975b8281a030f3646fcebfed50/src/image.lisp#L24
-[2074]: https://github.com/40ants/builder/blob/275423d4a762d2975b8281a030f3646fcebfed50/src/image.lisp#L41
-[8c0b]: https://github.com/40ants/builder/blob/275423d4a762d2975b8281a030f3646fcebfed50/src/image.lisp#L66
-[4e15]: https://github.com/40ants/builder/blob/275423d4a762d2975b8281a030f3646fcebfed50/src/registry.lisp#L1
-[70fc]: https://github.com/40ants/builder/blob/275423d4a762d2975b8281a030f3646fcebfed50/src/registry.lisp#L16
-[c7be]: https://github.com/40ants/builder/blob/275423d4a762d2975b8281a030f3646fcebfed50/src/version.lisp#L1
-[1785]: https://github.com/40ants/builder/blob/275423d4a762d2975b8281a030f3646fcebfed50/src/version.lisp#L13
-[a4f5]: https://github.com/40ants/builder/blob/275423d4a762d2975b8281a030f3646fcebfed50/src/version.lisp#L39
-[0672]: https://github.com/40ants/builder/blob/275423d4a762d2975b8281a030f3646fcebfed50/src/version.lisp#L66
+[07f3]: https://github.com/40ants/builder/blob/290d8f603d76ba4661a0e2635da93fd87131fe05/src/ccl.lisp#L1
+[1037]: https://github.com/40ants/builder/blob/290d8f603d76ba4661a0e2635da93fd87131fe05/src/ccl.lisp#L19
+[d288]: https://github.com/40ants/builder/blob/290d8f603d76ba4661a0e2635da93fd87131fe05/src/ccl.lisp#L85
+[2a7f]: https://github.com/40ants/builder/blob/290d8f603d76ba4661a0e2635da93fd87131fe05/src/ccl.lisp#L9
+[6a54]: https://github.com/40ants/builder/blob/290d8f603d76ba4661a0e2635da93fd87131fe05/src/core.lisp#L1
+[c67f]: https://github.com/40ants/builder/blob/290d8f603d76ba4661a0e2635da93fd87131fe05/src/core.lisp#L29
+[163f]: https://github.com/40ants/builder/blob/290d8f603d76ba4661a0e2635da93fd87131fe05/src/core.lisp#L48
+[2e3d]: https://github.com/40ants/builder/blob/290d8f603d76ba4661a0e2635da93fd87131fe05/src/dependencies.lisp#L1
+[2c27]: https://github.com/40ants/builder/blob/290d8f603d76ba4661a0e2635da93fd87131fe05/src/dependencies.lisp#L23
+[02a4]: https://github.com/40ants/builder/blob/290d8f603d76ba4661a0e2635da93fd87131fe05/src/dependencies.lisp#L8
+[e8e3]: https://github.com/40ants/builder/blob/290d8f603d76ba4661a0e2635da93fd87131fe05/src/ecl.lisp#L1
+[79fd]: https://github.com/40ants/builder/blob/290d8f603d76ba4661a0e2635da93fd87131fe05/src/ecl.lisp#L7
+[3d73]: https://github.com/40ants/builder/blob/290d8f603d76ba4661a0e2635da93fd87131fe05/src/image.lisp#L1
+[5636]: https://github.com/40ants/builder/blob/290d8f603d76ba4661a0e2635da93fd87131fe05/src/image.lisp#L10
+[a1ac]: https://github.com/40ants/builder/blob/290d8f603d76ba4661a0e2635da93fd87131fe05/src/image.lisp#L24
+[4e9f]: https://github.com/40ants/builder/blob/290d8f603d76ba4661a0e2635da93fd87131fe05/src/image.lisp#L41
+[c2e2]: https://github.com/40ants/builder/blob/290d8f603d76ba4661a0e2635da93fd87131fe05/src/image.lisp#L66
+[d5a8]: https://github.com/40ants/builder/blob/290d8f603d76ba4661a0e2635da93fd87131fe05/src/registry.lisp#L1
+[3938]: https://github.com/40ants/builder/blob/290d8f603d76ba4661a0e2635da93fd87131fe05/src/registry.lisp#L16
+[2e1c]: https://github.com/40ants/builder/blob/290d8f603d76ba4661a0e2635da93fd87131fe05/src/version.lisp#L1
+[916e]: https://github.com/40ants/builder/blob/290d8f603d76ba4661a0e2635da93fd87131fe05/src/version.lisp#L13
+[2ff3]: https://github.com/40ants/builder/blob/290d8f603d76ba4661a0e2635da93fd87131fe05/src/version.lisp#L39
+[92de]: https://github.com/40ants/builder/blob/290d8f603d76ba4661a0e2635da93fd87131fe05/src/version.lisp#L66
 [2fec]: https://github.com/40ants/builder/issues
 [c15d]: https://quickdocs.org/asdf
 

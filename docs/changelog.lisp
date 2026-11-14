@@ -12,6 +12,9 @@
                               "REPL"
                               "CFFI"
                               "CLI"))
+  (0.2.0 2026-11-14
+         "* The builder loads `local-deps.lisp` from the project root to
+            register local systems, instead of `roswell/local-deps.lisp`.")
   (0.1.0 2026-11-13
          "* Initial version. Extracted from the pingvito project's build.lisp
             script. Supports SBCL, CCL and ECL, pins the git commit and the

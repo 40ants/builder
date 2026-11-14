@@ -56,7 +56,7 @@
 
 
 (defun %write-local-deps (directory)
-  (let ((path (uiop:merge-pathnames* "roswell/local-deps.lisp"
+  (let ((path (uiop:merge-pathnames* "local-deps.lisp"
                                      directory)))
     (ensure-directories-exist path)
     (with-open-file (out path
@@ -173,7 +173,7 @@
   ;; The builder documents itself: the topmost entry of its own
   ;; docs/changelog.lisp defines its version.
   (ok (equal (read-changelog-version :40ants-builder)
-             "0.1.0")))
+             "0.2.0")))
 
 
 (deftest pin-build-version-captures-commit-and-pins-version
