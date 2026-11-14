@@ -9,16 +9,6 @@
   :class :40ants-asdf-system
   :defsystem-depends-on ("40ants-asdf-system")
   :pathname "src"
-  :depends-on ("40ants-builder/core"
-               ;; CFFI and conduit-packages get patched on CCL,
-               ;; see the 40ants-builder/ccl module:
-               #+ccl "cffi"
-               #+ccl "org.tfeb.conduit-packages")
+  :depends-on ("40ants-builder/core")
   :in-order-to ((test-op (test-op "40ants-builder-tests"))))
 
-
-#+ccl
-(progn
-  (asdf:register-system-packages "cffi" '("CFFI-SYS"))
-  (asdf:register-system-packages "org.tfeb.conduit-packages"
-                                 '("ORG.TFEB.CONDUIT-PACKAGES")))
