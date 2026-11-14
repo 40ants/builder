@@ -7,7 +7,12 @@
 ## 0.2.0 (2026-11-14)
 
 * The builder loads `local-deps.lisp` from the project root to
-register local systems, instead of `roswell/local-deps.lisp`.
+  register local systems, instead of `roswell/local-deps.lisp`.
+* Fixed compilation on `CCL` when `CFFI` or conduit-packages are not
+  loaded yet: the ccl module resolves their symbols at run time and
+  `install-ccl-patches` quickloads both libraries before installing
+  the patches, so the module no longer references their packages at
+  read time.
 
 <a id="x-2840ANTS-BUILDER-DOCS-2FCHANGELOG-3A-3A-7C0-2E1-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
