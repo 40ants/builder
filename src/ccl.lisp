@@ -26,9 +26,9 @@ This is a copy of the compute-conduit-clauses function of the
 org.tfeb.conduit-packages library which elides such names: importing
 the same external symbol via two :import-from clauses is tolerated by
 SBCL, but is a hard error on CCL (\"Name ... is already used in a
-conflicting option\"). The Lisp-Stat project defines its packages
-with the :extends option of the conduit-packages DEFPACKAGE macro,
-and several of its extended packages export the same symbols."
+conflicting option\"). The Lisp-Stat project defines its packages with
+the :extends option of the conduit-packages DEFPACKAGE macro, and
+several of its extended packages export the same symbols."
   (let ((seen (make-hash-table :test #'equal)))
     (flet ((fresh (names)
              (deduplicate-names names seen)))
@@ -57,7 +57,7 @@ and several of its extended packages export the same symbols."
 
 #+ccl
 (defun %load-foreign-library-eliding-versions (name path)
-  "A copy of CFFI-SYS:%LOAD-FOREIGN-LIBRARY which translates logical
+  "A copy of CFFI's %load-foreign-library which translates logical
 pathnames into physical ones and drops the pathname version.
 
 CCL defines the logical host home: for files inside the home
@@ -71,29 +71,48 @@ so the compiled file stores #P\"home:...;scipy-cephes;libmd.so.newest\":
 for a logical pathname, the default :newest version renders as a
 literal \".newest\" filename suffix, and the resulting dlopen fails.
 SBCL is not affected, because it renders pathnames without the
-version component."
+version component.
+
+CFFI symbols are resolved at run time, so this file compiles even
+when CFFI is not loaded."
   (declare (ignore name))
-  (ccl:open-shared-library
-   (cffi-sys:native-namestring
-    (let ((path (if (stringp path)
-                    (pathname path)
-                    path)))
-      (make-pathname :defaults (translate-logical-pathname path)
-                     :version nil)))))
+  (let ((native-namestring (find-symbol "NATIVE-NAMESTRING" "CFFI-SYS")))
+    (unless native-namestring
+      (error "CFFI is not loaded, cannot patch its foreign library loader."))
+    (ccl:open-shared-library
+     (funcall native-namestring
+              (let ((path (if (stringp path)
+                              (pathname path)
+                              path)))
+                (make-pathname :defaults (translate-logical-pathname path)
+                               :version nil))))))
 
 
 (defun install-ccl-patches ()
   "Patch CFFI and conduit-packages to make Lisp-Stat and its
 dependencies compile and load on CCL.
 
-Call before the target system is quickloaded, because the patches are
-used during compilation of its dependencies. On other implementations
-this is a no-op."
+Quickloads CFFI and conduit-packages and installs the patches. Call
+before the target system is quickloaded, because the patches are used
+during compilation of its dependencies. Symbols are resolved at run
+time, so this module compiles on implementations where CFFI and
+conduit-packages are absent. On other implementations this is a
+no-op."
   #+ccl
   (progn
-    (setf (fdefinition 'cffi-sys:%load-foreign-library)
-          #'%load-foreign-library-eliding-versions)
-    (setf (fdefinition 'org.tfeb.conduit-packages::compute-conduit-clauses)
-          #'elide-already-imported-clauses))
+    ;; Make sure the systems being patched are loaded:
+    (ql:quickload '(:cffi :org.tfeb.conduit-packages) :silent t)
+    (let ((load-library (find-symbol "%LOAD-FOREIGN-LIBRARY" "CFFI-SYS"))
+          (compute-clauses (find-symbol "COMPUTE-CONDUIT-CLAUSES"
+                                        "ORG.TFEB.CONDUIT-PACKAGES")))
+      (unless load-library
+        (error "CFFI does not define %LOAD-FOREIGN-LIBRARY."))
+      (unless compute-clauses
+        (error "The conduit-packages library does not define
+                COMPUTE-CONDUIT-CLAUSES."))
+      (setf (fdefinition load-library)
+            #'%load-foreign-library-eliding-versions)
+      (setf (fdefinition compute-clauses)
+            #'elide-already-imported-clauses)))
   #-ccl
   (values))
