@@ -1,0 +1,477 @@
+<html lang=en>
+ <head>
+  <meta charset=UTF-8><meta name=viewport
+      content="width=device-width, initial-scale=1">
+  <title>40ants-builder - A reusable builder of standalone binaries for Common Lisp 
+   projects</title>
+  <link rel=alternate
+        href="https://40ants.com/builder/changelog.xml"
+        type="application/rss+xml">
+  <link rel=stylesheet type="text/css"
+        href=theme.css>
+  <script type="text/javascript" src=jquery.js></script>
+  <script type="text/javascript" src=toc.js></script>
+  <script type="text/javascript">$(document).ready(function() {$('a:has(img)').css('border-bottom', 'none')})</script>
+  <link rel=stylesheet type="text/css"
+      href=highlight.min.css>
+  <script type="text/javascript"
+          src=highlight.min.js></script>
+  <script type="text/javascript">hljs.highlightAll();</script>
+<style type="text/css">
+/* Стили для сворачиваемого меню */
+.sidebar ul ul {
+  display: none; /* Скрываем все подменю по умолчанию */
+  margin-left: 0.5em;
+}
+
+.sidebar li.expanded > ul {
+  display: block; /* Показываем подменю для развернутых элементов */
+}
+
+/* Стили для пунктов с подменю */
+.sidebar li.has-children > a {
+  cursor: pointer;
+  position: relative;
+  padding-left: 1.2em;
+}
+
+.sidebar li.has-children > p > a {
+  position: relative;
+  left: -1rem;
+}
+
+.sidebar li.has-children > p > a::before {
+  content:"►";
+}
+
+.sidebar li.has-children.expanded > p > a::before {
+  content: "▼";
+  position: relative;
+  left: -0.08rem;
+}
+
+/* Подсветка активного пункта */
+.sidebar li.active > a {
+  font-weight: bold;
+}
+
+/* Если активная страница находится в подменю, раскрываем родителя */
+.sidebar li.active-parent {
+  font-weight: normal;
+}
+
+.sidebar li.active-parent > ul {
+  display: block;
+}
+</style>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FL71WXK73K"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-FL71WXK73K');
+    </script>
+
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript" >
+       (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+       m[i].l=1*new Date();
+       for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+       k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+       (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+       ym(42462884, "init", {
+            clickmap:true,
+            trackLinks:true,
+            accurateTrackBounce:true
+       });
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/42462884" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+
+ </head>
+ <body>
+  <div class=page><a id=fork-me href="https://github.com/40ants/builder">Fork me on GitHub</a>
+   <div class=navbar>
+    <div class=navbar-inner>
+     <a class=brand href="/">
+      <img class=logo
+           src="https://40ants.com/img/logo.svg"></a>
+     <ul class=nav>
+      <li><a href="/posts/">Blog</a>
+      <li><a href="/ru/posts/">Blog (RU)</a>
+      <li><a href="/tips/">Lisp Tips</a>
+      <li><a href="/projects/">Our Projects</a>
+      <li><a href="/about/">About</a>
+     </ul>
+    </div>
+   </div>
+   <input type=checkbox id=sidebar-check>
+   <label for=sidebar-check>
+    <div id=sidebar-trigger>
+     <span></span><span></span><span></span>
+    </div></label><div class=sidebar><div class=header><form class=search method=GET action="search/">
+      <input type=text name=q>
+      <input type=submit value=Search><span id=search-progress></span>
+     </form>
+    </div><div class=content><div class=page-toc><ul><li><p><a href="#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-40INDEX-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-40INDEX-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">40ants-builder - A reusable builder of standalone binaries for Common Lisp projects</a></p><ul><li><p><a href="#40-ants-builder-asdf-system-details" data-document="" data-node="40-ants-builder-asdf-system-details">40ANTS-BUILDER ASDF System Details</a></p></li><li><p><a href="#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-40FEATURES-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-40FEATURES-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Features</a></p></li><li><p><a href="#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-40INSTALLATION-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-40INSTALLATION-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Installation</a></p></li><li><p><a href="#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-40USAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-40USAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Usage</a></p></li><li><p><a href="#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-40FOR-AI-AGENTS-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-40FOR-AI-AGENTS-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">For AI Agents</a></p></li><li><p><a href="#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-40API-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-40API-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">API</a></p><ul><li><p><a href="#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FCCL-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FCCL-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">40ANTS-BUILDER/CCL</a></p><ul><li><p><a href="#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FCCL-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FCCL-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Functions</a></p></li></ul></li><li><p><a href="#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FCORE-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FCORE-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">40ANTS-BUILDER/CORE</a></p><ul><li><p><a href="#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FCORE-3FClasses-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FCORE-3FClasses-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Classes</a></p><ul><li><p><a href="#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FCORE-24BUILD-ERROR-3FCLASS-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FCORE-24BUILD-ERROR-3FCLASS-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">BUILD-ERROR</a></p></li></ul></li><li><p><a href="#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FCORE-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FCORE-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Functions</a></p></li><li><p><a href="#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FCORE-3FVariables-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FCORE-3FVariables-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Variables</a></p></li></ul></li><li><p><a href="#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FDEPENDENCIES-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FDEPENDENCIES-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">40ANTS-BUILDER/DEPENDENCIES</a></p><ul><li><p><a href="#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FDEPENDENCIES-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FDEPENDENCIES-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Functions</a></p></li><li><p><a href="#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FDEPENDENCIES-3FVariables-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FDEPENDENCIES-3FVariables-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Variables</a></p></li></ul></li><li><p><a href="#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FECL-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FECL-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">40ANTS-BUILDER/ECL</a></p><ul><li><p><a href="#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FECL-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FECL-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Functions</a></p><ul><li><p><a href="#if-load-with-contextl-contextl-values-inside-defpackage" data-document="" data-node="if-load-with-contextl-contextl-values-inside-defpackage">.(if <i>load-with-contextl</i> '#:contextl (values)) inside DEFPACKAGE.</a></p></li></ul></li></ul></li><li><p><a href="#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FIMAGE-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FIMAGE-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">40ANTS-BUILDER/IMAGE</a></p><ul><li><p><a href="#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FIMAGE-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FIMAGE-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Functions</a></p></li></ul></li><li><p><a href="#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FREGISTRY-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FREGISTRY-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">40ANTS-BUILDER/REGISTRY</a></p><ul><li><p><a href="#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FREGISTRY-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FREGISTRY-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Functions</a></p></li></ul></li><li><p><a href="#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FVERSION-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FVERSION-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">40ANTS-BUILDER/VERSION</a></p><ul><li><p><a href="#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FVERSION-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FVERSION-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Functions</a></p></li><li><p><a href="#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FVERSION-3FVariables-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FVERSION-3FVariables-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Variables</a></p></li></ul></li></ul></li></ul></li><li><p><a href="changelog/#x-2840ANTS-BUILDER-DOCS-2FCHANGELOG-3A-40CHANGELOG-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="changelog/" data-node="x-2840ANTS-BUILDER-DOCS-2FCHANGELOG-3A-40CHANGELOG-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">ChangeLog</a></p></li></ul>
+     </div>
+    </div><div class=footer>
+     <a href="https://40ants.com/doc">[generated by 40ANTS-DOC]</a>
+    </div>
+   </div><div class=content role=main><h1>40ants-builder - A reusable builder of standalone binaries for Common Lisp projects<a class=header-link
+     href=#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-40INDEX-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-40INDEX-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h1><h2 id="40-ants-builder-asdf-system-details">40ANTS-BUILDER ASDF System Details</h2><ul><li><p>Description: A reusable builder of standalone binaries for Common Lisp projects.</p></li><li><p>Licence: Unlicense</p></li><li><p>Author: Alexander Artemenko &lt;svetlyak.40wt@gmail.com&gt;</p></li><li><p>Homepage: <a href="https://40ants.com/builder/">https://40ants.com/builder/</a></p></li><li><p>Bug tracker: <a href="https://github.com/40ants/builder/issues">https://github.com/40ants/builder/issues</a></p></li><li><p>Source control: <a href="https://github.com/40ants/builder">GIT</a></p></li><li><p>Depends on: <a href="https://quickdocs.org/asdf">asdf</a></p></li></ul><p><a href="https://github.com/40ants/ai-badges"><img src="https://img.shields.io/badge/WARN-LLM%20GENERATED-FF6347"/></a></p><p><a href="https://github.com/40ants/builder/actions"><img src="https://github-actions.40ants.com/40ants/builder/matrix.svg?only=ci.run-tests"/></a></p><p><img src="http://quickdocs.org/badge/40ants-builder.svg"/></p><h2>Features<a class=header-link
+     href=#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-40FEATURES-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-40FEATURES-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><p>Dumping a standalone binary of a Common Lisp application requires more
+than calling <code>asdf:make</code> or <code>ros build</code>. A production build needs a
+prepared environment: local checkouts registered in <code>ASDF</code>,
+implementation specific quirks patched, Slynk contrib modules loaded
+before the dump (a Slynk client cannot load them at run time on the
+production host, where neither Quicklisp nor the sources are
+reachable), and the build identification captured while the sources
+and <code>.git</code> are still around. This recipe usually lives in a
+per-project <code>build.lisp</code> script, copied between projects, untested and
+undocumented. <code>40ants-builder</code> extracts it into one reusable, tested
+function: <code>(40ants-builder:build :my-app)</code>.</p><p>The library does not replace Deploy: it complements it. Your system
+still declares <code>deploy-op</code> as its <code>:build-operation</code>, and Deploy
+bundles foreign libraries and dumps the image. 40ants-builder takes
+care of everything around that dump and finishes by calling
+<code>asdf:make</code>, which performs <code>deploy-op</code>.</p><ul><li><p><b>One call builds the binary.</b> <code>(40ants-builder:build :my-app)</code>
+  runs the whole pipeline: registry setup, workarounds, dependency
+  loading, version pinning, image preparation and the dump.</p></li><li><p><b>Local systems registered.</b> A <code>local-deps.lisp</code> file in the
+  project root, when present, is loaded to push local checkout
+  directories onto the <code>ASDF</code> registry.</p></li><li><p><b>Implementation quirks patched.</b> On <code>CCL</code> the builder fixes <code>CFFI</code>'s
+  foreign library loader, which chokes on logical pathnames with a
+  <code>:newest</code> version suffix, and teaches conduit-packages to elide
+  duplicate defpackage imports, which Lisp-Stat requires; on <code>ECL</code> it
+  creates an empty <code>NIL</code> package so the dependencies' defpackage forms
+  stay readable.</p></li><li><p><b>Build identification pinned.</b> The git commit and the version from
+  the system's <code>docs/changelog.lisp</code> are stored into the image, so
+  <code>--version</code> reports what the binary was built from, even on a host
+  without sources.</p></li><li><p><b>Production ready image.</b> Slynk contrib modules are loaded before
+  the dump, the <code>:deploy-console</code> feature silences Deploy's status
+  output at service startup, and the build debugger hook is removed,
+  so it does not ship inside the binary.</p></li><li><p><b>Multiple implementations.</b> <code>SBCL</code> and <code>CCL</code> build via <code>asdf:make</code>
+  (usually <code>deploy-op</code>), <code>ECL</code> builds via <code>asdf:program-op</code>, which does
+  not rely on the unsupported <code>uiop:dump-image</code>.</p></li><li><p><b>Fail fast behavior.</b> Any build error prints the condition with a
+  backtrace and exits with a non-zero code instead of hanging in the
+  interactive debugger; pass <code>exit nil</code> to embed the pipeline into
+  another tool and handle errors yourself.</p></li></ul><h2>Installation<a class=header-link
+     href=#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-40INSTALLATION-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-40INSTALLATION-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><p>You can install this library from Quicklisp, but you want to receive updates quickly, then install it from Ultralisp.org:</p><pre><code class="">(ql-dist:install-dist &quot;http://dist.ultralisp.org/&quot;
+                      :prompt nil)
+(ql:quickload :40ants-builder)</code></pre><h2>Usage<a class=header-link
+     href=#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-40USAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-40USAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><p>Call the build function with the name of the <code>ASDF</code> system which
+describes your program. For a project which defines a <code>pingvito</code>
+system with a <code>deploy-op</code> build operation, run from the project's
+root:</p><pre><code class="sh">qlot exec ros run --eval '(ql:quickload :40ants-builder)' --eval '(40ants-builder:build :pingvito)'</code></pre><p>The pipeline, essentially a common <code>build.lisp</code> script extracted into
+a reusable library:</p><ol><li><p>installs a debugger hook which fails the process with exit code 1
+   instead of hanging in the interactive debugger;</p></li><li><p>extends the <code>ASDF</code> registry from the <code>local-deps.lisp</code> file in the
+   system's source directory, when it is present;</p></li><li><p>installs implementation workarounds: patches <code>CFFI</code>'s foreign
+   library loader and conduit-packages's <code>DEFPACKAGE</code> clause
+   computation on <code>CCL</code>, and creates an empty <code>NIL</code> package on <code>ECL</code>;</p></li><li><p>quickloads Deploy, the system being built and Slynk contrib
+   modules, which otherwise would be missing in production when a
+   Slynk client connects;</p></li><li><p>pins the build identification: the git commit goes into
+   <code>40ants-builder:*git-commit*</code> and the system's <code>ASDF</code> version
+   becomes <code>VERSION+GIT.COMMIT</code>;</p></li><li><p>prepares the image for the dump: renames the Clack handler package
+   to its slash nickname, pushes the <code>:deploy-console</code> feature and
+   removes the build debugger hook, so it does not get dumped into
+   the image;</p></li><li><p>dumps the binary: asdf:make on <code>SBCL</code> and <code>CCL</code>, and
+   asdf:program-op on <code>ECL</code>, which does not support
+   uiop:dump-image.</p></li></ol><p>On success the process exits with code 0; on failure the condition is
+printed with a backtrace and the process exits with code 1.</p><p>Pass <code>slynk-modules nil</code> to skip the Slynk contribs and <code>exit nil</code> to
+keep the process alive, returning the pinned commit instead of
+quitting:</p><pre><code class="lisp">(40ants-builder:build :pingvito :slynk-modules nil)</code></pre><p>Note that a binary built on one operating system or architecture cannot run on
+another one. Build on the target host or in an equivalent
+environment, and keep the <code>bin/</code> directory with native libraries next
+to the binary in the release.</p><h2>For AI Agents<a class=header-link
+     href=#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-40FOR-AI-AGENTS-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-40FOR-AI-AGENTS-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><p>This library is written with <code>AI</code> coding agents, and it ships an agent
+skill so that agents can adopt it correctly. The skill teaches how to
+convert a project to build through 40ants-builder: the program system
+layout, the optional <code>local-deps.lisp</code> registry file, the direct
+command and the 40ants-lake <code>builder</code> slot integration, build
+verification, and the retirement of an old <code>build.lisp</code> script.</p><p>Point your coding agent to the
+<a href="https://github.com/40ants/builder/blob/master/.agents/skills/setup-40ants-builder/SKILL.md"><code>SKILL.md</code></a>
+file of this repository, or copy it into your project's
+<code>.agents/skills/setup-40ants-builder/</code> directory. The
+<a href="https://github.com/40ants/ai-badges">AI badge</a> in the <code>README</code> marks the
+code as <code>LLM</code> generated.</p><h2>API<a class=header-link
+     href=#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-40API-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-40API-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><h3>40ANTS-BUILDER/CCL<a class=header-link
+     href=#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FCCL-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FCCL-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h3><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/builder/blob/f2c292ef4434c7237168bd33a5af8af2b2d22c80/src/ccl.lisp#L1">package</a><div class=reference-object><div class=object-name><a href=#x-28-23A-28-2818-29-20BASE-CHAR-20-2E-20-2240ANTS-BUILDER-2FCCL-22-29-20PACKAGE-29 id=x-28-23A-28-2818-29-20BASE-CHAR-20-2E-20-2240ANTS-BUILDER-2FCCL-22-29-20PACKAGE-29>40ants-builder/ccl</a></div></div><a class=bullet-link href=#x-28-23A-28-2818-29-20BASE-CHAR-20-2E-20-2240ANTS-BUILDER-2FCCL-22-29-20PACKAGE-29></a></div></div><h4>Functions<a class=header-link
+     href=#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FCCL-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FCCL-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h4><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/builder/blob/f2c292ef4434c7237168bd33a5af8af2b2d22c80/src/ccl.lisp#L9">function</a><div class=reference-object><div class=object-name><a href=#x-2840ANTS-BUILDER-2FCCL-3ADEDUPLICATE-NAMES-20FUNCTION-29 id=x-2840ANTS-BUILDER-2FCCL-3ADEDUPLICATE-NAMES-20FUNCTION-29>40ants-builder/ccl:deduplicate-names</a></div><div class=object-args><span class=locative-args>names seen</span></div></div><a class=bullet-link href=#x-2840ANTS-BUILDER-2FCCL-3ADEDUPLICATE-NAMES-20FUNCTION-29></a></div><div class=bullet-content><p>Return only those names which are not in the <code>SEEN</code> hash-table yet,
+registering every returned name.</p></div></div><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/builder/blob/f2c292ef4434c7237168bd33a5af8af2b2d22c80/src/ccl.lisp#L19">function</a><div class=reference-object><div class=object-name><a href=#x-2840ANTS-BUILDER-2FCCL-3AELIDE-ALREADY-IMPORTED-CLAUSES-20FUNCTION-29 id=x-2840ANTS-BUILDER-2FCCL-3AELIDE-ALREADY-IMPORTED-CLAUSES-20FUNCTION-29>40ants-builder/ccl:elide-already-imported-clauses</a></div><div class=object-args><span class=locative-args>&amp;key extends extends/including extends/excluding</span></div></div><a class=bullet-link href=#x-2840ANTS-BUILDER-2FCCL-3AELIDE-ALREADY-IMPORTED-CLAUSES-20FUNCTION-29></a></div><div class=bullet-content><p>Return <code>DEFPACKAGE</code> clauses for a conduit package, skipping symbol
+names already imported by a previous extension.</p><p>This is a copy of the compute-conduit-clauses function of the
+org.tfeb.conduit-packages library which elides such names: importing
+the same external symbol via two :import-from clauses is tolerated by
+<code>SBCL</code>, but is a hard error on <code>CCL</code> (&quot;Name ... is already used in a
+conflicting option&quot;). The Lisp-Stat project defines its packages with
+the :extends option of the conduit-packages <code>DEFPACKAGE</code> macro, and
+several of its extended packages export the same symbols.</p></div></div><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/builder/blob/f2c292ef4434c7237168bd33a5af8af2b2d22c80/src/ccl.lisp#L91">function</a><div class=reference-object><div class=object-name><a href=#x-2840ANTS-BUILDER-2FCCL-3AINSTALL-CCL-PATCHES-20FUNCTION-29 id=x-2840ANTS-BUILDER-2FCCL-3AINSTALL-CCL-PATCHES-20FUNCTION-29>40ants-builder/ccl:install-ccl-patches</a></div></div><a class=bullet-link href=#x-2840ANTS-BUILDER-2FCCL-3AINSTALL-CCL-PATCHES-20FUNCTION-29></a></div><div class=bullet-content><p>Patch <code>CFFI</code> and conduit-packages to make Lisp-Stat and its
+dependencies compile and load on <code>CCL</code>.</p><p>Quickloads <code>CFFI</code> and conduit-packages and installs the patches. Call
+before the target system is quickloaded, because the patches are used
+during compilation of its dependencies. Symbols are resolved at run
+time, so this module compiles on implementations where <code>CFFI</code> and
+conduit-packages are absent. On other implementations this is a
+no-op.</p></div></div><h3>40ANTS-BUILDER/CORE<a class=header-link
+     href=#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FCORE-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FCORE-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h3><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/builder/blob/f2c292ef4434c7237168bd33a5af8af2b2d22c80/src/core.lisp#L1">package</a><div class=reference-object><div class=object-name><a href=#x-28-23A-28-2819-29-20BASE-CHAR-20-2E-20-2240ANTS-BUILDER-2FCORE-22-29-20PACKAGE-29 id=x-28-23A-28-2819-29-20BASE-CHAR-20-2E-20-2240ANTS-BUILDER-2FCORE-22-29-20PACKAGE-29>40ants-builder/core</a></div></div><a class=bullet-link href=#x-28-23A-28-2819-29-20BASE-CHAR-20-2E-20-2240ANTS-BUILDER-2FCORE-22-29-20PACKAGE-29></a></div></div><h4>Classes<a class=header-link
+     href=#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FCORE-3FClasses-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FCORE-3FClasses-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h4><h5>BUILD-ERROR<a class=header-link
+     href=#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FCORE-24BUILD-ERROR-3FCLASS-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FCORE-24BUILD-ERROR-3FCLASS-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h5><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/builder/blob/f2c292ef4434c7237168bd33a5af8af2b2d22c80/src/core.lisp#L29">condition</a><div class=reference-object><div class=object-name><a href=#x-2840ANTS-BUILDER-2FCORE-3ABUILD-ERROR-20CONDITION-29 id=x-2840ANTS-BUILDER-2FCORE-3ABUILD-ERROR-20CONDITION-29>40ants-builder/core:build-error</a></div><div class=object-args><span class=locative-args></span></div></div><a class=bullet-link href=#x-2840ANTS-BUILDER-2FCORE-3ABUILD-ERROR-20CONDITION-29></a></div></div><p><b>Readers</b></p><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/builder/blob/f2c292ef4434c7237168bd33a5af8af2b2d22c80/src/core.lisp#L29">reader</a><div class=reference-object><div class=object-name><a href=#x-2840ANTS-BUILDER-2FCORE-3ABUILD-ERROR-CONDITION-20-2840ANTS-DOC-2FLOCATIVES-3AREADER-2040ANTS-BUILDER-2FCORE-3ABUILD-ERROR-29-29 id=x-2840ANTS-BUILDER-2FCORE-3ABUILD-ERROR-CONDITION-20-2840ANTS-DOC-2FLOCATIVES-3AREADER-2040ANTS-BUILDER-2FCORE-3ABUILD-ERROR-29-29>40ants-builder/core:build-error-condition</a></div><div class=object-args><span class=locative-args></span><span class=locative-args>(:condition)</span></div></div><a class=bullet-link href=#x-2840ANTS-BUILDER-2FCORE-3ABUILD-ERROR-CONDITION-20-2840ANTS-DOC-2FLOCATIVES-3AREADER-2040ANTS-BUILDER-2FCORE-3ABUILD-ERROR-29-29></a></div></div><h4>Functions<a class=header-link
+     href=#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FCORE-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FCORE-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h4><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/builder/blob/f2c292ef4434c7237168bd33a5af8af2b2d22c80/src/core.lisp#L48">function</a><div class=reference-object><div class=object-name><a href=#x-2840ANTS-BUILDER-2FCORE-3ABUILD-20FUNCTION-29 id=x-2840ANTS-BUILDER-2FCORE-3ABUILD-20FUNCTION-29>40ants-builder/core:build</a></div><div class=object-args><span class=locative-args>system &amp;key (slynk-modules \*default-slynk-modules\*) (exit t)</span></div></div><a class=bullet-link href=#x-2840ANTS-BUILDER-2FCORE-3ABUILD-20FUNCTION-29></a></div><div class=bullet-content><p>Build a standalone binary of <code>SYSTEM</code> and return the pinned git commit.</p><p><code>SYSTEM</code> is an <code>ASDF</code> system designator of the program system, like
+:pingvito. The pipeline is essentially a build.lisp script extracted
+into a reusable library:</p><ol><li><p>installs a debugger hook which fails the process with exit code 1
+   instead of hanging in the interactive debugger;</p></li><li><p>extends the <code>ASDF</code> registry from the local-deps.lisp file in
+   <code>SYSTEM</code>'s source directory, when it is present;</p></li><li><p>installs implementation workarounds (the <code>CFFI</code> and conduit-packages
+   patches on <code>CCL</code>, the empty &quot;<code>NIL</code>&quot; package on <code>ECL</code>);</p></li><li><p>quickloads Deploy, <code>SYSTEM</code> and <code>SLYNK-MODULES</code> (defaults to
+   <i>default-slynk-modules</i>; pass <code>NIL</code> to skip them);</p></li><li><p>pins the build identification: the git commit goes into
+   <i>git-commit</i> and the commit is appended to the <code>ASDF</code> version of
+   <code>SYSTEM</code>;</p></li><li><p>prepares the image for the dump: renames the Clack handler package
+   to its slash nickname, pushes the :deploy-console feature and
+   removes the build debugger hook;</p></li><li><p>dumps the binary: asdf:make on <code>SBCL</code> and <code>CCL</code>, asdf:program-op on
+   <code>ECL</code>.</p></li></ol><p>On success the process exits with code 0. On failure the condition is
+printed with a backtrace and the process exits with code 1. When <code>EXIT</code>
+is <code>NIL</code>, build does not quit: it returns the commit on success and
+signals build-error, wrapping the original condition, on failure.</p></div></div><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/builder/blob/f2c292ef4434c7237168bd33a5af8af2b2d22c80/src/version.lisp#L66">function</a><div class=reference-object><div class=object-name><a href=#x-2840ANTS-BUILDER-2FVERSION-3APIN-BUILD-VERSION-20FUNCTION-29 id=x-2840ANTS-BUILDER-2FVERSION-3APIN-BUILD-VERSION-20FUNCTION-29>40ants-builder/version:pin-build-version</a></div><div class=object-args><span class=locative-args>system</span></div></div><a class=bullet-link href=#x-2840ANTS-BUILDER-2FVERSION-3APIN-BUILD-VERSION-20FUNCTION-29></a></div><div class=bullet-content><p>Capture build-time identification of <code>SYSTEM</code> into the image.</p><p>Stores the git commit into <i>git-commit</i> and appends the commit to the
+system's version, updating its component-version. The version is
+taken from the system's component-version or, when it is unset, from
+the topmost entry of its docs/changelog.lisp.</p><p>Called before the image dump, so that the binary's version flag
+reports the state of the sources it was built from, and not of
+whatever is on disk at run time. Returns the commit.</p></div></div><h4>Variables<a class=header-link
+     href=#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FCORE-3FVariables-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FCORE-3FVariables-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h4><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/builder/blob/f2c292ef4434c7237168bd33a5af8af2b2d22c80/src/dependencies.lisp#L8">variable</a><div class=reference-object><div class=object-name><a href=#x-2840ANTS-BUILDER-2FDEPENDENCIES-3A-2ADEFAULT-SLYNK-MODULES-2A-20-28VARIABLE-29-29 id=x-2840ANTS-BUILDER-2FDEPENDENCIES-3A-2ADEFAULT-SLYNK-MODULES-2A-20-28VARIABLE-29-29>40ants-builder/dependencies:*default-slynk-modules*</a></div><div class=object-args><span class=locative-args>(:slynk/indentation :slynk/stickers :slynk/trace-dialog :slynk/package-fu
+ :slynk/fancy-inspector :slynk/arglists)</span></div></div><a class=bullet-link href=#x-2840ANTS-BUILDER-2FDEPENDENCIES-3A-2ADEFAULT-SLYNK-MODULES-2A-20-28VARIABLE-29-29></a></div><div class=bullet-content><p>Slynk contrib modules loaded into the image before the dump.</p><p>The Slynk server tries to load these modules when a client connects
+and cannot do that in production, where neither Quicklisp nor the
+sources are reachable. Pass <code>NIL</code> as <code>SLYNK-MODULES</code> argument of the
+build function to skip them.</p></div></div><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/builder/blob/f2c292ef4434c7237168bd33a5af8af2b2d22c80/src/version.lisp#L13">variable</a><div class=reference-object><div class=object-name><a href=#x-2840ANTS-BUILDER-2FVERSION-3A-2AGIT-COMMIT-2A-20-28VARIABLE-29-29 id=x-2840ANTS-BUILDER-2FVERSION-3A-2AGIT-COMMIT-2A-20-28VARIABLE-29-29>40ants-builder/version:*git-commit*</a></div><div class=object-args><span class=locative-args>&quot;unknown&quot;</span></div></div><a class=bullet-link href=#x-2840ANTS-BUILDER-2FVERSION-3A-2AGIT-COMMIT-2A-20-28VARIABLE-29-29></a></div><div class=bullet-content><p>Git commit captured by pin-build-version before the image dump.</p><p>The binary usually runs on a host without .git and sources
+(ProtectHome=read-only), so the commit has to be captured at build
+time. Projects use this variable in their version flag output.</p></div></div><h3>40ANTS-BUILDER/DEPENDENCIES<a class=header-link
+     href=#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FDEPENDENCIES-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FDEPENDENCIES-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h3><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/builder/blob/f2c292ef4434c7237168bd33a5af8af2b2d22c80/src/dependencies.lisp#L1">package</a><div class=reference-object><div class=object-name><a href=#x-28-23A-28-2827-29-20BASE-CHAR-20-2E-20-2240ANTS-BUILDER-2FDEPENDENCIES-22-29-20PACKAGE-29 id=x-28-23A-28-2827-29-20BASE-CHAR-20-2E-20-2240ANTS-BUILDER-2FDEPENDENCIES-22-29-20PACKAGE-29>40ants-builder/dependencies</a></div></div><a class=bullet-link href=#x-28-23A-28-2827-29-20BASE-CHAR-20-2E-20-2240ANTS-BUILDER-2FDEPENDENCIES-22-29-20PACKAGE-29></a></div></div><h4>Functions<a class=header-link
+     href=#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FDEPENDENCIES-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FDEPENDENCIES-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h4><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/builder/blob/f2c292ef4434c7237168bd33a5af8af2b2d22c80/src/dependencies.lisp#L23">function</a><div class=reference-object><div class=object-name><a href=#x-2840ANTS-BUILDER-2FDEPENDENCIES-3ALOAD-BUILD-DEPENDENCIES-20FUNCTION-29 id=x-2840ANTS-BUILDER-2FDEPENDENCIES-3ALOAD-BUILD-DEPENDENCIES-20FUNCTION-29>40ants-builder/dependencies:load-build-dependencies</a></div><div class=object-args><span class=locative-args>system &amp;key (slynk-modules \*default-slynk-modules\*)</span></div></div><a class=bullet-link href=#x-2840ANTS-BUILDER-2FDEPENDENCIES-3ALOAD-BUILD-DEPENDENCIES-20FUNCTION-29></a></div><div class=bullet-content><p>Load everything which has to be present in the dumped image.</p><p>This is the Deploy library, the <code>SYSTEM</code> being built and the <code>SLYNK-MODULES</code>.</p></div></div><h4>Variables<a class=header-link
+     href=#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FDEPENDENCIES-3FVariables-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FDEPENDENCIES-3FVariables-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h4><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/builder/blob/f2c292ef4434c7237168bd33a5af8af2b2d22c80/src/dependencies.lisp#L8">variable</a><div class=reference-object><div class=object-name><a href=#x-2840ANTS-BUILDER-2FDEPENDENCIES-3A-2ADEFAULT-SLYNK-MODULES-2A-20-28VARIABLE-29-29 id=x-2840ANTS-BUILDER-2FDEPENDENCIES-3A-2ADEFAULT-SLYNK-MODULES-2A-20-28VARIABLE-29-29>40ants-builder/dependencies:*default-slynk-modules*</a></div><div class=object-args><span class=locative-args>(:slynk/indentation :slynk/stickers :slynk/trace-dialog :slynk/package-fu
+ :slynk/fancy-inspector :slynk/arglists)</span></div></div><a class=bullet-link href=#x-2840ANTS-BUILDER-2FDEPENDENCIES-3A-2ADEFAULT-SLYNK-MODULES-2A-20-28VARIABLE-29-29></a></div><div class=bullet-content><p>Slynk contrib modules loaded into the image before the dump.</p><p>The Slynk server tries to load these modules when a client connects
+and cannot do that in production, where neither Quicklisp nor the
+sources are reachable. Pass <code>NIL</code> as <code>SLYNK-MODULES</code> argument of the
+build function to skip them.</p></div></div><h3>40ANTS-BUILDER/ECL<a class=header-link
+     href=#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FECL-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FECL-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h3><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/builder/blob/f2c292ef4434c7237168bd33a5af8af2b2d22c80/src/ecl.lisp#L1">package</a><div class=reference-object><div class=object-name><a href=#x-28-23A-28-2818-29-20BASE-CHAR-20-2E-20-2240ANTS-BUILDER-2FECL-22-29-20PACKAGE-29 id=x-28-23A-28-2818-29-20BASE-CHAR-20-2E-20-2240ANTS-BUILDER-2FECL-22-29-20PACKAGE-29>40ants-builder/ecl</a></div></div><a class=bullet-link href=#x-28-23A-28-2818-29-20BASE-CHAR-20-2E-20-2240ANTS-BUILDER-2FECL-22-29-20PACKAGE-29></a></div></div><h4>Functions<a class=header-link
+     href=#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FECL-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FECL-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h4><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/builder/blob/f2c292ef4434c7237168bd33a5af8af2b2d22c80/src/ecl.lisp#L7">function</a><div class=reference-object><div class=object-name><a href=#x-2840ANTS-BUILDER-2FECL-3AINSTALL-ECL-WORKAROUNDS-20FUNCTION-29 id=x-2840ANTS-BUILDER-2FECL-3AINSTALL-ECL-WORKAROUNDS-20FUNCTION-29>40ants-builder/ecl:install-ecl-workarounds</a></div></div><a class=bullet-link href=#x-2840ANTS-BUILDER-2FECL-3AINSTALL-ECL-WORKAROUNDS-20FUNCTION-29></a></div><div class=bullet-content><p>Prepare the image so the dependencies' <code>DEFPACKAGE</code> forms can be read
+on <code>ECL</code>.</p><p>Some dependencies (metacopy, in particular) read</p><h5 id="if-load-with-contextl-contextl-values-inside-defpackage">.(if <i>load-with-contextl</i> '#:contextl (values)) inside DEFPACKAGE.</h5><p>On <code>SBCL</code>, the reader inserts nothing into the list for zero values of
+sharp-dot, while the <code>ECL</code> reader inserts <code>NIL</code>, which <code>DEFPACKAGE</code> turns
+into :use of a package named &quot;<code>NIL</code>&quot;, and <code>ECL</code> fails with &quot;There
+exists no package with name <code>NIL</code>&quot;. Creating an empty package with
+this name makes such <code>DEFPACKAGE</code> forms valid. On other implementations
+this is a no-op.</p></div></div><h3>40ANTS-BUILDER/IMAGE<a class=header-link
+     href=#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FIMAGE-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FIMAGE-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h3><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/builder/blob/f2c292ef4434c7237168bd33a5af8af2b2d22c80/src/image.lisp#L1">package</a><div class=reference-object><div class=object-name><a href=#x-28-23A-28-2820-29-20BASE-CHAR-20-2E-20-2240ANTS-BUILDER-2FIMAGE-22-29-20PACKAGE-29 id=x-28-23A-28-2820-29-20BASE-CHAR-20-2E-20-2240ANTS-BUILDER-2FIMAGE-22-29-20PACKAGE-29>40ants-builder/image</a></div></div><a class=bullet-link href=#x-28-23A-28-2820-29-20BASE-CHAR-20-2E-20-2240ANTS-BUILDER-2FIMAGE-22-29-20PACKAGE-29></a></div></div><h4>Functions<a class=header-link
+     href=#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FIMAGE-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FIMAGE-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h4><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/builder/blob/f2c292ef4434c7237168bd33a5af8af2b2d22c80/src/image.lisp#L66">function</a><div class=reference-object><div class=object-name><a href=#x-2840ANTS-BUILDER-2FIMAGE-3ADUMP-BINARY-20FUNCTION-29 id=x-2840ANTS-BUILDER-2FIMAGE-3ADUMP-BINARY-20FUNCTION-29>40ants-builder/image:dump-binary</a></div><div class=object-args><span class=locative-args>system</span></div></div><a class=bullet-link href=#x-2840ANTS-BUILDER-2FIMAGE-3ADUMP-BINARY-20FUNCTION-29></a></div><div class=bullet-content><p>Dump the standalone binary of <code>SYSTEM</code>.</p><p>On <code>SBCL</code> and <code>CCL</code> this is asdf:make, which performs the system's
+:build-operation (deploy-op for Pingvito). <code>ECL</code> does not support
+uiop:dump-image, and deploy-op relies on it, so under <code>ECL</code> the standard
+asdf:program-op is used instead: the system is compiled to C and the
+object files are linked into an executable with c:build-program,
+using the :entry-point and :build-pathname from the system's
+definition file.</p></div></div><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/builder/blob/f2c292ef4434c7237168bd33a5af8af2b2d22c80/src/image.lisp#L24">function</a><div class=reference-object><div class=object-name><a href=#x-2840ANTS-BUILDER-2FIMAGE-3AENSURE-PACKAGE-NICKNAME-20FUNCTION-29 id=x-2840ANTS-BUILDER-2FIMAGE-3AENSURE-PACKAGE-NICKNAME-20FUNCTION-29>40ants-builder/image:ensure-package-nickname</a></div><div class=object-args><span class=locative-args>package-name nickname</span></div></div><a class=bullet-link href=#x-2840ANTS-BUILDER-2FIMAGE-3AENSURE-PACKAGE-NICKNAME-20FUNCTION-29></a></div><div class=bullet-content><p>Add <code>NICKNAME</code> to the package named <code>PACKAGE-NAME</code>.</p><p>Does nothing when the package does not exist or when a package named
+<code>NICKNAME</code> is already present, because in these cases rename-package
+either has nothing to do or signals a correctable error. Returns T
+when the package was renamed.</p></div></div><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/builder/blob/f2c292ef4434c7237168bd33a5af8af2b2d22c80/src/image.lisp#L10">function</a><div class=reference-object><div class=object-name><a href=#x-2840ANTS-BUILDER-2FIMAGE-3AINSTALL-BUILD-DEBUGGER-HOOK-20FUNCTION-29 id=x-2840ANTS-BUILDER-2FIMAGE-3AINSTALL-BUILD-DEBUGGER-HOOK-20FUNCTION-29>40ants-builder/image:install-build-debugger-hook</a></div></div><a class=bullet-link href=#x-2840ANTS-BUILDER-2FIMAGE-3AINSTALL-BUILD-DEBUGGER-HOOK-20FUNCTION-29></a></div><div class=bullet-content><p>Install a debugger hook which fails the build process immediately.</p><p>Any error during the build must exit the process with a non-zero
+code, instead of leaving it hanging in the interactive debugger of
+Roswell/<code>CCL</code>.</p></div></div><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/builder/blob/f2c292ef4434c7237168bd33a5af8af2b2d22c80/src/image.lisp#L41">function</a><div class=reference-object><div class=object-name><a href=#x-2840ANTS-BUILDER-2FIMAGE-3APREPARE-IMAGE-20FUNCTION-29 id=x-2840ANTS-BUILDER-2FIMAGE-3APREPARE-IMAGE-20FUNCTION-29>40ants-builder/image:prepare-image</a></div></div><a class=bullet-link href=#x-2840ANTS-BUILDER-2FIMAGE-3APREPARE-IMAGE-20FUNCTION-29></a></div><div class=bullet-content><p>Prepare the build image for the dump.</p><p>Gives the Clack Hunchentoot handler package its slash nickname:
+Clack looks handlers up by a name with slashes, does not find it in
+the current dist and calls ql:quickload at run time, which fails
+under ProtectHome. The nickname removes the runtime load.</p><p>Then pushes the :deploy-console feature to silence Deploy's status
+output at service startup (&quot;Performing warm boot&quot;, &quot;Loading foreign
+library ...&quot; etc.): with this feature the warm boot sets
+<i>status-output</i> to <code>NIL</code>, the same way deploy-console-op does for
+console applications. Build identification stays available through
+the project's version flag.</p><p>Finally, removes the build-only debugger hook, so it does not get
+dumped into the image: otherwise any runtime error would kill the
+service with a build failure message instead of the project's own
+error handling.</p></div></div><h3>40ANTS-BUILDER/REGISTRY<a class=header-link
+     href=#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FREGISTRY-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FREGISTRY-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h3><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/builder/blob/f2c292ef4434c7237168bd33a5af8af2b2d22c80/src/registry.lisp#L1">package</a><div class=reference-object><div class=object-name><a href=#x-28-23A-28-2823-29-20BASE-CHAR-20-2E-20-2240ANTS-BUILDER-2FREGISTRY-22-29-20PACKAGE-29 id=x-28-23A-28-2823-29-20BASE-CHAR-20-2E-20-2240ANTS-BUILDER-2FREGISTRY-22-29-20PACKAGE-29>40ants-builder/registry</a></div></div><a class=bullet-link href=#x-28-23A-28-2823-29-20BASE-CHAR-20-2E-20-2240ANTS-BUILDER-2FREGISTRY-22-29-20PACKAGE-29></a></div></div><h4>Functions<a class=header-link
+     href=#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FREGISTRY-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FREGISTRY-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h4><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/builder/blob/f2c292ef4434c7237168bd33a5af8af2b2d22c80/src/registry.lisp#L16">function</a><div class=reference-object><div class=object-name><a href=#x-2840ANTS-BUILDER-2FREGISTRY-3AREGISTER-LOCAL-SYSTEMS-20FUNCTION-29 id=x-2840ANTS-BUILDER-2FREGISTRY-3AREGISTER-LOCAL-SYSTEMS-20FUNCTION-29>40ants-builder/registry:register-local-systems</a></div><div class=object-args><span class=locative-args>system</span></div></div><a class=bullet-link href=#x-2840ANTS-BUILDER-2FREGISTRY-3AREGISTER-LOCAL-SYSTEMS-20FUNCTION-29></a></div><div class=bullet-content><p>Extend the <code>ASDF</code> registry with systems local to the project being built.</p><p>Projects keep a local-deps.lisp file next to their system definition
+file; it defines an extend-registry function which pushes local
+checkout directories onto asdf:*central-registry*. When the file is
+missing, nothing is registered and the call is a no-op, because a
+project may have all its dependencies on Quicklisp.</p></div></div><h3>40ANTS-BUILDER/VERSION<a class=header-link
+     href=#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FVERSION-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-4040ANTS-BUILDER-2FVERSION-3FPACKAGE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h3><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/builder/blob/f2c292ef4434c7237168bd33a5af8af2b2d22c80/src/version.lisp#L1">package</a><div class=reference-object><div class=object-name><a href=#x-28-23A-28-2822-29-20BASE-CHAR-20-2E-20-2240ANTS-BUILDER-2FVERSION-22-29-20PACKAGE-29 id=x-28-23A-28-2822-29-20BASE-CHAR-20-2E-20-2240ANTS-BUILDER-2FVERSION-22-29-20PACKAGE-29>40ants-builder/version</a></div></div><a class=bullet-link href=#x-28-23A-28-2822-29-20BASE-CHAR-20-2E-20-2240ANTS-BUILDER-2FVERSION-22-29-20PACKAGE-29></a></div></div><h4>Functions<a class=header-link
+     href=#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FVERSION-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FVERSION-3FFunctions-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h4><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/builder/blob/f2c292ef4434c7237168bd33a5af8af2b2d22c80/src/version.lisp#L66">function</a><div class=reference-object><div class=object-name><a href=#x-2840ANTS-BUILDER-2FVERSION-3APIN-BUILD-VERSION-20FUNCTION-29 id=x-2840ANTS-BUILDER-2FVERSION-3APIN-BUILD-VERSION-20FUNCTION-29>40ants-builder/version:pin-build-version</a></div><div class=object-args><span class=locative-args>system</span></div></div><a class=bullet-link href=#x-2840ANTS-BUILDER-2FVERSION-3APIN-BUILD-VERSION-20FUNCTION-29></a></div><div class=bullet-content><p>Capture build-time identification of <code>SYSTEM</code> into the image.</p><p>Stores the git commit into <i>git-commit</i> and appends the commit to the
+system's version, updating its component-version. The version is
+taken from the system's component-version or, when it is unset, from
+the topmost entry of its docs/changelog.lisp.</p><p>Called before the image dump, so that the binary's version flag
+reports the state of the sources it was built from, and not of
+whatever is on disk at run time. Returns the commit.</p></div></div><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/builder/blob/f2c292ef4434c7237168bd33a5af8af2b2d22c80/src/version.lisp#L39">function</a><div class=reference-object><div class=object-name><a href=#x-2840ANTS-BUILDER-2FVERSION-3AREAD-CHANGELOG-VERSION-20FUNCTION-29 id=x-2840ANTS-BUILDER-2FVERSION-3AREAD-CHANGELOG-VERSION-20FUNCTION-29>40ants-builder/version:read-changelog-version</a></div><div class=object-args><span class=locative-args>system</span></div></div><a class=bullet-link href=#x-2840ANTS-BUILDER-2FVERSION-3AREAD-CHANGELOG-VERSION-20FUNCTION-29></a></div><div class=bullet-content><p>Return the topmost version from <code>SYSTEM</code>'s docs/changelog.lisp or <code>NIL</code>.</p><p>This mirrors what the 40ants-asdf-system class does on an explicit
+load-system: the first changelog entry defines the version. Forms
+are read into a temporary package, because the changelog macro and
+version symbols are not interned anywhere in the build image.</p></div></div><h4>Variables<a class=header-link
+     href=#x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FVERSION-3FVariables-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-2840ANTS-BUILDER-DOCS-2FINDEX-3A-3A-7C-4040ANTS-BUILDER-2FVERSION-3FVariables-SECTION-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h4><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/builder/blob/f2c292ef4434c7237168bd33a5af8af2b2d22c80/src/version.lisp#L13">variable</a><div class=reference-object><div class=object-name><a href=#x-2840ANTS-BUILDER-2FVERSION-3A-2AGIT-COMMIT-2A-20-28VARIABLE-29-29 id=x-2840ANTS-BUILDER-2FVERSION-3A-2AGIT-COMMIT-2A-20-28VARIABLE-29-29>40ants-builder/version:*git-commit*</a></div><div class=object-args><span class=locative-args>&quot;unknown&quot;</span></div></div><a class=bullet-link href=#x-2840ANTS-BUILDER-2FVERSION-3A-2AGIT-COMMIT-2A-20-28VARIABLE-29-29></a></div><div class=bullet-content><p>Git commit captured by pin-build-version before the image dump.</p><p>The binary usually runs on a host without .git and sources
+(ProtectHome=read-only), so the commit has to be captured at build
+time. Projects use this variable in their version flag output.</p></div></div>
+   </div><div class=footer>
+    <hr class=separator>
+    <p class=fineprint>Created with passion by <em>40Ants</em><a class=lisp-logo
+     href="http://lisp-lang.org/">
+      <img
+           src="https://40ants.com/img/made-with-lisp.svg"></a>
+   </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Ключ для localStorage
+  const STORAGE_KEY = '40ants-builder-docs-menu-state';
+  
+  // Загружаем сохраненное состояние меню
+  function loadMenuState() {
+    try {
+      const savedState = localStorage.getItem(STORAGE_KEY);
+      return savedState ? JSON.parse(savedState) : {};
+    } catch (e) {
+      console.error('Ошибка при загрузке состояния меню:', e);
+      return {};
+    }
+  }
+  
+  // Сохраняем текущее состояние меню
+  function saveMenuState(state) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+      console.error('Ошибка при сохранении состояния меню:', e);
+    }
+  }
+  
+  // Получаем уникальный идентификатор для пункта меню
+  function getMenuItemId(item) {
+    const link = item.querySelector('a');
+    if (!link) return null;
+    
+    // Используем текст ссылки как идентификатор
+    // Можно также использовать href, но он может меняться в зависимости от текущей страницы
+    return link.innerText.trim();
+  }
+  
+  // Загружаем сохраненное состояние
+  const menuState = loadMenuState();
+  
+  // Находим все пункты меню с подпунктами
+  const menuItems = document.querySelectorAll('.sidebar li');
+  
+  // Обрабатываем каждый пункт меню
+  menuItems.forEach(item => {
+    const subMenu = item.querySelector('ul');
+    
+    // Если у пункта есть подменю
+    if (subMenu) {
+      const itemId = getMenuItemId(item);
+      item.classList.add('has-children');
+      
+      // Восстанавливаем состояние из localStorage, если оно сохранено
+      if (itemId && menuState[itemId]) {
+        item.classList.add('expanded');
+      }
+      
+      // Добавляем обработчик клика
+      const link = item.querySelector('a');
+      if (link) {
+        link.addEventListener('click', function(e) {
+          // Останавливаем переход по ссылке только если кликнули по пункту с подменю
+          if (item.classList.contains('has-children')) {
+            e.preventDefault();
+            
+            // Переключаем класс для раскрытия/скрытия
+            item.classList.toggle('expanded');
+            
+            // Сохраняем новое состояние
+            if (itemId) {
+              if (item.classList.contains('expanded')) {
+                menuState[itemId] = true;
+              } else {
+                delete menuState[itemId];
+              }
+              saveMenuState(menuState);
+            }
+          }
+        });
+      }
+    }
+  });
+  
+  // Функция для поиска и раскрытия родителей активного пункта
+  function expandActiveItemParents() {
+    const activeItem = document.querySelector('.sidebar li.active');
+    if (activeItem) {
+      let parent = activeItem.parentElement;
+      
+      while (parent) {
+        if (parent.tagName === 'UL' && parent.parentElement && parent.parentElement.tagName === 'LI') {
+          parent.parentElement.classList.add('expanded');
+          parent.parentElement.classList.add('active-parent');
+          
+          // Сохраняем состояние активного родителя
+          const parentItem = parent.parentElement;
+          const parentId = getMenuItemId(parentItem);
+          if (parentId) {
+            menuState[parentId] = true;
+          }
+        }
+        parent = parent.parentElement;
+      }
+      
+      // Сохраняем обновленное состояние после раскрытия активных родителей
+      saveMenuState(menuState);
+    }
+  }
+  
+  // Запускаем функцию для текущей страницы
+  expandActiveItemParents();
+});
+</script>
+
+
+  </div>
+ </body>
+</html>
