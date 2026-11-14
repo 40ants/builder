@@ -55,6 +55,8 @@
                                    "GIT"))
   (40ants-builder system)
   "
+[![WARN-LLM GENERATED](https://img.shields.io/badge/WARN-LLM%20GENERATED-FF6347)](https://github.com/40ants/ai-badges)
+
 [![](https://github-actions.40ants.com/40ants/builder/matrix.svg?only=ci.run-tests)](https://github.com/40ants/builder/actions)
 
 ![Quicklisp](http://quickdocs.org/badge/40ants-builder.svg)
