@@ -11,3 +11,10 @@
   :perform (test-op (op c)
                     (unless (symbol-call :rove :run c)
                       (error "Tests failed"))))
+
+
+#+ccl
+(progn
+  (asdf:register-system-packages "cffi" '("CFFI-SYS"))
+  (asdf:register-system-packages "org.tfeb.conduit-packages"
+                                 '("ORG.TFEB.CONDUIT-PACKAGES")))
