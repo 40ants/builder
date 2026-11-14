@@ -39,7 +39,7 @@
 
 
 (defsection @index (:title "40ants-builder - A reusable builder of standalone binaries for Common Lisp projects"
-                    :ignore-words ("JSON"
+                                   :ignore-words ("JSON"
                                    "HTTP"
                                    "TODO"
                                    "Unlicense"
@@ -47,7 +47,10 @@
                                    "ASDF"
                                    "40A"
                                    "API"
+                                   "AI"
                                    "CLI"
+                                   "LLM"
+                                   "README"
                                    "SBCL"
                                    "CCL"
                                    "ECL"
@@ -64,6 +67,7 @@
   (@features section)
   (@installation section)
   (@usage section)
+  (@for-ai-agents section)
   (@api section))
 
 
@@ -182,6 +186,24 @@ Note that a binary built on one operating system or architecture cannot run on
 another one. Build on the target host or in an equivalent
 environment, and keep the `bin/` directory with native libraries next
 to the binary in the release.
+""")
+
+
+(defsection @for-ai-agents (:title "For AI Agents")
+  """
+This library is written with AI coding agents, and it ships an agent
+skill so that agents can adopt it correctly. The skill teaches how to
+convert a project to build through 40ants-builder: the program system
+layout, the optional `local-deps.lisp` registry file, the direct
+command and the 40ants-lake `builder` slot integration, build
+verification, and the retirement of an old `build.lisp` script.
+
+Point your coding agent to the
+[`SKILL.md`](https://github.com/40ants/builder/blob/master/.agents/skills/setup-40ants-builder/SKILL.md)
+file of this repository, or copy it into your project's
+`.agents/skills/setup-40ants-builder/` directory. The
+[AI badge](https://github.com/40ants/ai-badges) in the README marks the
+code as LLM generated.
 """)
 
 
