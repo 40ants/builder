@@ -59,12 +59,63 @@
 
 ![Quicklisp](http://quickdocs.org/badge/40ants-builder.svg)
 "
+  (@features section)
   (@installation section)
   (@usage section)
   (@api section))
 
 
 (defsection-copy @readme @index)
+
+
+(defsection @features (:title "Features")
+  """
+Dumping a standalone binary of a Common Lisp application requires more
+than calling `asdf:make` or `ros build`. A production build needs a
+prepared environment: local checkouts registered in ASDF,
+implementation specific quirks patched, Slynk contrib modules loaded
+before the dump (a Slynk client cannot load them at run time on the
+production host, where neither Quicklisp nor the sources are
+reachable), and the build identification captured while the sources
+and `.git` are still around. This recipe usually lives in a
+per-project `build.lisp` script, copied between projects, untested and
+undocumented. `40ants-builder` extracts it into one reusable, tested
+function: `(40ants-builder:build :my-app)`.
+
+The library does not replace Deploy: it complements it. Your system
+still declares `deploy-op` as its `:build-operation`, and Deploy
+bundles foreign libraries and dumps the image. 40ants-builder takes
+care of everything around that dump and finishes by calling
+`asdf:make`, which performs `deploy-op`.
+
+- **One call builds the binary.** `(40ants-builder:build :my-app)`
+  runs the whole pipeline: registry setup, workarounds, dependency
+  loading, version pinning, image preparation and the dump.
+- **Local systems registered.** A `roswell/local-deps.lisp` file, when
+  present, is loaded to push local checkout directories onto the ASDF
+  registry.
+- **Implementation quirks patched.** On CCL the builder fixes CFFI's
+  foreign library loader, which chokes on logical pathnames with a
+  `:newest` version suffix, and teaches conduit-packages to elide
+  duplicate defpackage imports, which Lisp-Stat requires; on ECL it
+  creates an empty `NIL` package so the dependencies' defpackage forms
+  stay readable.
+- **Build identification pinned.** The git commit and the version from
+  the system's `docs/changelog.lisp` are stored into the image, so
+  `--version` reports what the binary was built from, even on a host
+  without sources.
+- **Production ready image.** Slynk contrib modules are loaded before
+  the dump, the `:deploy-console` feature silences Deploy's status
+  output at service startup, and the build debugger hook is removed,
+  so it does not ship inside the binary.
+- **Multiple implementations.** SBCL and CCL build via `asdf:make`
+  (usually `deploy-op`), ECL builds via `asdf:program-op`, which does
+  not rely on the unsupported `uiop:dump-image`.
+- **Fail fast behavior.** Any build error prints the condition with a
+  backtrace and exits with a non-zero code instead of hanging in the
+  interactive debugger; pass `exit nil` to embed the pipeline into
+  another tool and handle errors yourself.
+""")
 
 
 (defsection @installation (:title "Installation")
